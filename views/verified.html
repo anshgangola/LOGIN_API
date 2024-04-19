@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Verification</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 50px;
+      }
+      h1 {
+        color: #4caf50;
+      }
+      p {
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Email Verification</h1>
+    <p id="verification-status">Verifying...</p>
+
+    <script>
+      // Get user ID and verification token from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get("userId");
+      const verificationToken = urlParams.get("verificationToken");
+
+      // Make AJAX request to verify email
+      fetch(`/user/verify/${userId}/${verificationToken}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // Update verification status message
+          const verificationStatusElement = document.getElementById(
+            "verification-status"
+          );
+          if (data.status === "SUCCESS") {
+            verificationStatusElement.textContent =
+              "Email Verification Successful!";
+          } else {
+            verificationStatusElement.textContent =
+              "Email Verification Failed. Please try again later.";
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // Update verification status message
+          const verificationStatusElement = document.getElementById(
+            "verification-status"
+          );
+          verificationStatusElement.textContent =
+            "An error occurred. Please try again later.";
+        });
+    </script>
+  </body>
+</html>
